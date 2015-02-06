@@ -9,6 +9,7 @@
  */
 namespace Sulu\Bundle\WebCrawlerBundle\CacheWarmer;
 
+use Sulu\Bundle\WebCrawlerBundle\WebCrawler\WebCrawlerInterface;
 use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 
 /**
@@ -17,11 +18,33 @@ use Symfony\Component\HttpKernel\CacheWarmer\CacheWarmerInterface;
 class HttpCacheWarmer implements CacheWarmerInterface
 {
     /**
+     * @var WebCrawlerInterface
+     */
+    private $crawler;
+
+    /**
+     * @var array
+     */
+    private $urls;
+
+    /**
+     * @var string
+     */
+    private $env;
+
+    function __construct(WebCrawlerInterface $crawler, $urls, $env)
+    {
+        $this->crawler = $crawler;
+        $this->urls = $urls;
+        $this->env = $env;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function isOptional()
     {
-        // TODO: Implement isOptional() method.
+        return true;
     }
 
     /**
@@ -29,6 +52,10 @@ class HttpCacheWarmer implements CacheWarmerInterface
      */
     public function warmUp($cacheDir)
     {
-        // TODO: Implement warmUp() method.
+        if ($this->env !== 'dev') {
+            foreach ($this->urls as $url) {
+                $this->crawler->run($url['url'], $url['depth']);
+            }
+        }
     }
 }

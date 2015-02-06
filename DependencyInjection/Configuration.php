@@ -26,6 +26,22 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sulu_web_crawler');
 
+        $rootNode->children()
+                ->arrayNode('cache_warmer')
+                    ->canBeEnabled()
+                    ->children()
+                        ->arrayNode('urls')
+                            ->prototype('array')
+                                ->children()
+                                    ->scalarNode('url')->end()
+                                    ->scalarNode('depth')->defaultValue(3)->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+            ->end();
+
         return $treeBuilder;
     }
 }
