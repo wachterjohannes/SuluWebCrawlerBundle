@@ -20,6 +20,11 @@ class WebCrawler implements WebCrawlerInterface
      */
     private $crawlerFactory;
 
+    function __construct(CrawlerFactoryInterface $crawlerFactory)
+    {
+        $this->crawlerFactory = $crawlerFactory;
+    }
+
     /**
      * Returns a fresh crawler instance with given url and depth
      * @param string $url
@@ -37,7 +42,7 @@ class WebCrawler implements WebCrawlerInterface
     public function run($url, $depth = 3)
     {
         $crawler = $this->create($url, $depth);
-        $crawler->traverse($url);
+        $crawler->traverse();
 
         return $crawler->getLinks();
     }
