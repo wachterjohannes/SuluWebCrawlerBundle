@@ -11,7 +11,7 @@
 namespace Sulu\Bundle\WebCrawlerBundle\WebCrawler;
 
 /**
- * Wrapps the webcrawler from codeguy/arachnid
+ * Wraps the webcrawler from codeguy/arachnid
  */
 class WebCrawler implements WebCrawlerInterface
 {
