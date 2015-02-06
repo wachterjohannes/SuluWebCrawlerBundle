@@ -15,5 +15,30 @@ namespace Sulu\Bundle\WebCrawlerBundle\WebCrawler;
  */
 class WebCrawler implements WebCrawlerInterface
 {
+    /**
+     * @var CrawlerFactoryInterface
+     */
+    private $crawlerFactory;
 
+    /**
+     * Returns a fresh crawler instance with given url and depth
+     * @param string $url
+     * @param int $depth
+     * @return \Arachnid\Crawler
+     */
+    protected function create($url, $depth = 3)
+    {
+        return $this->crawlerFactory->create($url, $depth);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function run($url, $depth = 3)
+    {
+        $crawler = $this->create($url, $depth);
+        $crawler->traverse($url);
+
+        return $crawler->getLinks();
+    }
 }

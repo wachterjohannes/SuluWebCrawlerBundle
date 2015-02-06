@@ -10,17 +10,18 @@
 
 namespace Sulu\Bundle\WebCrawlerBundle\WebCrawler;
 
-/**
- * Interface for web crawler
- */
-interface WebCrawlerInterface
-{
+use Arachnid\Crawler;
 
+/**
+ * Interface for a crawler factory
+ */
+interface CrawlerFactoryInterface
+{
     /**
-     * Run a crawling process and returns the result
-     * @param $url
-     * @param int $depth
-     * @return array
+     * Create an instance of a Crawler
+     * @param string $url
+     * @param integer $depth
+     * @return Crawler
      */
-    public function run($url, $depth = 3);
+    public function create($url, $depth = 3);
 }
