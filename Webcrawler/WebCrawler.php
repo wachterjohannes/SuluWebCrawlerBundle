@@ -19,10 +19,20 @@ class WebCrawler implements WebCrawlerInterface
      * @var CrawlerFactoryInterface
      */
     private $crawlerFactory;
+    /**
+     * @var WebCrawlerLoggerInterface
+     */
+    private $logger;
+    /**
+     * @var bool
+     */
+    private $log;
 
-    function __construct(CrawlerFactoryInterface $crawlerFactory)
+    function __construct(CrawlerFactoryInterface $crawlerFactory, WebCrawlerLoggerInterface $logger, $log = true)
     {
         $this->crawlerFactory = $crawlerFactory;
+        $this->logger = $logger;
+        $this->log = $log;
     }
 
     /**
@@ -44,6 +54,11 @@ class WebCrawler implements WebCrawlerInterface
         $crawler = $this->create($url, $depth);
         $crawler->traverse();
 
-        return $crawler->getLinks();
+        $result = $crawler->getLinks();
+        if ($this->log) {
+            $this->logger->log($result);
+        }
+
+        return $result;
     }
 }

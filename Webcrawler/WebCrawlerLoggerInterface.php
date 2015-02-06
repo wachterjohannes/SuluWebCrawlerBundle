@@ -16,4 +16,9 @@ namespace Sulu\Bundle\WebCrawlerBundle\WebCrawler;
 interface WebCrawlerLoggerInterface
 {
 
+    /**
+     * Log result to a logfile
+     * @param array $crawlResult
+     */
+    public function log($crawlResult);
 }

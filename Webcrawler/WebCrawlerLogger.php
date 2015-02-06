@@ -10,16 +10,53 @@
 
 namespace Sulu\Bundle\WebCrawlerBundle\WebCrawler;
 
+use Psr\Log\LoggerInterface;
+
 /**
  * Log result of a crawl process
  */
 class WebCrawlerLogger implements WebCrawlerLoggerInterface
 {
     /**
-     * Log result to a logfile
-     * @param array $crawlResult
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function log($crawlResult)
     {
+        foreach ($crawlResult as $url => $item) {
+            $this->logItem($url, $item);
+        }
     }
+
+    /**
+     * Log a single crawl item
+     * @param string $url
+     * @param array $item
+     */
+    private function logItem($url, $item) {
+        $statusCode = isset($item['status_code']) ? $item['status_code'] : '???';
+        $title = isset($item['title']) ? mb_strimwidth($item['title'], 0, 34, ' ...') : '???';
+        $message = sprintf('status: %s, title:"%s", url: "%s"', $statusCode, $title, $url);
+
+        switch ($statusCode) {
+            case '200':
+            case '301':
+                $this->logger->info($message);
+                break;
+            case '404':
+                $this->logger->error($message);
+                break;
+            default:
+                $this->logger->debug(sprintf('not-visited (%s)', $message));
+                break;
+        }}
 }
