@@ -1,0 +1,33 @@
+{
+    "name": "sulu/web-crawler-bundle",
+    "type": "sulu-bundle",
+    "description": "This bundle integrate the 'Arachnid Web Crawler' into the symfony world. It is sulu independent.",
+    "license": "MIT",
+    "keywords": [
+        "sulu",
+        "website",
+        "crawler"
+    ],
+    "authors": [
+        {
+            "name": "Sulu Community",
+            "homepage": "https://github.com/sulu-cmf/SuluWebCrawlerBundle/contributors"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "codeguy/arachnid": "1.*"
+    },
+    "require-dev": {
+        "symfony/symfony": "2.6.*",
+        "symfony/monolog-bundle": "2.4.*",
+        "phpunit/phpunit": "3.7.*",
+        "phpspec/prophecy-phpunit": "1.0.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "Sulu\\Bundle\\WebCrawlerBundle": ""
+        }
+    },
+    "target-dir": "Sulu/Bundle/WebCrawlerBundle"
+}
