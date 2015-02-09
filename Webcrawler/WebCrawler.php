@@ -10,6 +10,10 @@
 
 namespace Sulu\Bundle\WebCrawlerBundle\WebCrawler;
 
+use Sulu\Bundle\WebCrawlerBundle\Events\Events;
+use Sulu\Bundle\WebCrawlerBundle\Events\FinishedEvent;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 /**
  * Wraps the webcrawler from codeguy/arachnid
  */
@@ -19,20 +23,16 @@ class WebCrawler implements WebCrawlerInterface
      * @var CrawlerFactoryInterface
      */
     private $crawlerFactory;
-    /**
-     * @var WebCrawlerLoggerInterface
-     */
-    private $logger;
-    /**
-     * @var bool
-     */
-    private $log;
 
-    function __construct(CrawlerFactoryInterface $crawlerFactory, WebCrawlerLoggerInterface $logger, $log = true)
+    /**
+     * @var EventDispatcherInterface
+     */
+    private $eventDispatcher;
+
+    function __construct(CrawlerFactoryInterface $crawlerFactory, EventDispatcherInterface $eventDispatcher)
     {
         $this->crawlerFactory = $crawlerFactory;
-        $this->logger = $logger;
-        $this->log = $log;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -55,9 +55,8 @@ class WebCrawler implements WebCrawlerInterface
         $crawler->traverse();
 
         $result = $crawler->getLinks();
-        if ($this->log) {
-            $this->logger->log($result);
-        }
+
+        $this->eventDispatcher->dispatch(Events::WEBCRAWLER_FINISHED, new FinishedEvent($result, $url, $depth));
 
         return $result;
     }

@@ -8,16 +8,26 @@
         <parameter key="sulu_web_crawler.factory.class">Sulu\Bundle\WebCrawlerBundle\WebCrawler\CrawlerFactory</parameter>
         <parameter key="sulu_web_crawler.logger.class">Sulu\Bundle\WebCrawlerBundle\WebCrawler\WebCrawlerLogger</parameter>
         <parameter key="sulu_web_crawler.class">Sulu\Bundle\WebCrawlerBundle\WebCrawler\WebCrawler</parameter>
+        <parameter key="sulu_web_crawler.event_finished.logger.class">Sulu\Bundle\WebCrawlerBundle\EventListener\LoggerEventListener</parameter>
+        <parameter type="constant" key="sulu_web_crawler.event_finished.name">Sulu\Bundle\WebCrawlerBundle\Events\Events::WEBCRAWLER_FINISHED</parameter>
     </parameters>
 
     <services>
+        <!-- crawler -->
         <service id="sulu_web_crawler.factory" class="%sulu_web_crawler.factory.class%" public="false"/>
         <service id="sulu_web_crawler.logger" class="%sulu_web_crawler.logger.class%" public="false">
             <argument type="service" id="logger"/>
         </service>
         <service id="sulu_web_crawler" class="%sulu_web_crawler.class%">
             <argument type="service" id="sulu_web_crawler.factory"/>
+            <argument type="service" id="event_dispatcher"/>
+        </service>
+
+        <!-- event listener -->
+        <service id="sulu_web_crawler.event_finished.logger" class="%sulu_web_crawler.event_finished.logger.class%">
             <argument type="service" id="sulu_web_crawler.logger"/>
+
+            <tag name="kernel.event_listener" event="%sulu_web_crawler.event_finished.name%" method="onFinished"/>
         </service>
     </services>
 </container>
