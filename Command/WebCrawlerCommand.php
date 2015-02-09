@@ -41,7 +41,7 @@ class WebCrawlerCommand extends ContainerAwareCommand
         $result = $crawler->run($input->getArgument('url'), intval($input->getArgument('depth')));
 
         $table = new Table($output);
-        $table->setHeaders(array('Status Code', 'Title', 'URL', 'External', 'Visited', 'Frequency'));
+        $table->setHeaders(array('Status Code', 'Title', 'URL', 'External', 'Visited', 'Referrer', 'Frequency'));
 
         foreach ($result as $url => $item) {
             $table->addRow(
@@ -51,6 +51,7 @@ class WebCrawlerCommand extends ContainerAwareCommand
                     mb_strimwidth($url, 0, 54, ' ...'),
                     !isset($item['external_link']) ? '???' : $item['external_link'] ? 'yes' : 'no',
                     !isset($item['visited']) ? '???' : $item['visited'] ? 'yes' : 'no',
+                    isset($item['referrer']) ? join(',', $item['referrer']) : '???',
                     isset($item['frequency']) ? $item['frequency'] : '???',
                 )
             );

@@ -42,8 +42,10 @@ class WebCrawlerLogger implements WebCrawlerLoggerInterface
      * @param string $url
      * @param array $item
      */
-    private function logItem($url, $item) {
+    private function logItem($url, $item)
+    {
         $statusCode = isset($item['status_code']) ? $item['status_code'] : '???';
+        $errorMessage = isset($item['error_message']) ? $item['error_message'] : '???';
         $title = isset($item['title']) ? mb_strimwidth($item['title'], 0, 34, ' ...') : '???';
         $message = sprintf('status: %s, title:"%s", url: "%s"', $statusCode, $title, $url);
 
@@ -55,8 +57,19 @@ class WebCrawlerLogger implements WebCrawlerLoggerInterface
             case '404':
                 $this->logger->error($message);
                 break;
+            case 'error':
+                $message = sprintf(
+                    'status: %s, title:"%s", error_message: "%s", url: "%s"',
+                    $statusCode,
+                    $title,
+                    $errorMessage,
+                    $url
+                );
+                $this->logger->error($message);
+                break;
             default:
                 $this->logger->debug(sprintf('not-visited (%s)', $message));
                 break;
-        }}
+        }
+    }
 }
