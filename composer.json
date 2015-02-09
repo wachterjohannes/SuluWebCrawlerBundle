@@ -14,9 +14,15 @@
             "homepage": "https://github.com/sulu-cmf/SuluWebCrawlerBundle/contributors"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wachterjohannes/arachnid"
+        }
+    ],
     "require": {
         "php": ">=5.4",
-        "codeguy/arachnid": "1.*"
+        "codeguy/arachnid": "dev-develop"
     },
     "require-dev": {
         "symfony/symfony": "2.6.*",
